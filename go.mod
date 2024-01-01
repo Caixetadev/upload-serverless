@@ -7,6 +7,7 @@ require (
 	github.com/aws/aws-sdk-go v1.49.12
 	github.com/aws/aws-sdk-go-v2/config v1.26.2
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.47.7
+	github.com/aws/aws-sdk-go-v2/service/ses v1.19.5
 	github.com/aws/aws-sdk-go-v2/service/sqs v1.29.6
 	github.com/joho/godotenv v1.5.1
 )
