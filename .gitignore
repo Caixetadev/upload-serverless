@@ -1,0 +1,4 @@
+**/bootstrap
+samconfig.toml
+*.terraform*
+*.tfstate*
