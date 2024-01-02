@@ -17,7 +17,8 @@ resource "aws_lambda_function" "lambda_notification" {
     aws_iam_role_policy_attachment.lambda_logs,
     aws_cloudwatch_log_group.notification_lambda,
     aws_iam_role_policy_attachment.s3,
-    aws_iam_role_policy_attachment.sqs
+    aws_iam_role_policy_attachment.sqs,
+    aws_iam_role_policy_attachment.ses
   ]
 }
 

@@ -85,11 +85,31 @@ data "aws_iam_policy_document" "s3" {
   }
 }
 
+
+data "aws_iam_policy_document" "ses" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "ses:SendEmail",
+    ]
+
+    resources = [aws_ses_email_identity.ses_caixeta.arn]
+  }
+}
+
 resource "aws_iam_policy" "s3" {
   name        = "s3"
   path        = "/"
   description = "IAM policy for s3"
   policy      = data.aws_iam_policy_document.s3.json
+}
+
+resource "aws_iam_policy" "ses" {
+  name        = "ses"
+  path        = "/"
+  description = "IAM policy for ses"
+  policy      = data.aws_iam_policy_document.ses.json
 }
 
 resource "aws_iam_policy" "sqs" {
@@ -104,6 +124,11 @@ resource "aws_iam_policy" "lambda_logging" {
   path        = "/"
   description = "IAM policy for logging from a lambda"
   policy      = data.aws_iam_policy_document.lambda_logging.json
+}
+
+resource "aws_iam_role_policy_attachment" "ses" {
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = aws_iam_policy.ses.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
