@@ -7,7 +7,7 @@ env:
   TF_CLOUD_ORGANIZATION: "caixeta-terraform"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_WORKSPACE: "learn-terraform-github-actions"
-  CONFIG_DIRECTORY: "./"
+  CONFIG_DIRECTORY: "./tf"
 
 jobs:
   terraform:
