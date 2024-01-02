@@ -18,11 +18,6 @@ resource "aws_api_gateway_method" "upload" {
   authorization = "NONE"
 }
 
-variable "binary_data" {
-  type    = string
-  default = "SGVsbG8gd29ybGQhCg=="  # Exemplo: "Hello world!"
-}
-
 resource "aws_api_gateway_integration" "lambda_upload" {
   rest_api_id = aws_api_gateway_rest_api.example.id
   resource_id = aws_api_gateway_method.upload.resource_id
@@ -31,7 +26,6 @@ resource "aws_api_gateway_integration" "lambda_upload" {
   request_templates = {
     "application/json" = jsonencode({
       route = "$context.resourcePath"
-      binaryData = base64decode(var.binary_data)
     })
   }
 
@@ -39,6 +33,7 @@ resource "aws_api_gateway_integration" "lambda_upload" {
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.handler.invoke_arn
 }
+
 resource "aws_api_gateway_deployment" "example" {
   depends_on = [
     "aws_api_gateway_integration.lambda_upload",

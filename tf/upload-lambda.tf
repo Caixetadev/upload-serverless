@@ -45,6 +45,10 @@ resource "aws_cloudwatch_log_group" "handler_lambda" {
   name = "/aws/lambda/${var.lambda_function_name}"
 }
 
+resource "aws_cloudwatch_log_group" "notification_lambda" {
+  name = "/aws/lambda/notification_lambda"
+}
+
 data "aws_iam_policy_document" "lambda_logging" {
   statement {
     effect = "Allow"
@@ -56,6 +60,16 @@ data "aws_iam_policy_document" "lambda_logging" {
     ]
 
     resources = ["arn:aws:logs:*:*:*"]
+  }
+}
+
+data "aws_iam_policy_document" "sqs" {
+  statement {
+    effect = "Allow"
+
+    actions = ["*"]
+
+    resources = [aws_sqs_queue.sqs_test.arn]
   }
 }
 
@@ -78,6 +92,13 @@ resource "aws_iam_policy" "s3" {
   policy      = data.aws_iam_policy_document.s3.json
 }
 
+resource "aws_iam_policy" "sqs" {
+  name        = "sqs"
+  path        = "/"
+  description = "IAM policy for sqs"
+  policy      = data.aws_iam_policy_document.sqs.json
+}
+
 resource "aws_iam_policy" "lambda_logging" {
   name        = "lambda_logging"
   path        = "/"
@@ -93,4 +114,9 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
 resource "aws_iam_role_policy_attachment" "s3" {
   role       = aws_iam_role.iam_for_lambda.name
   policy_arn = aws_iam_policy.s3.arn
+}
+
+resource "aws_iam_role_policy_attachment" "sqs" {
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = aws_iam_policy.sqs.arn
 }
