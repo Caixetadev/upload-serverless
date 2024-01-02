@@ -34,6 +34,13 @@ resource "aws_lambda_function" "handler" {
   runtime          = "go1.x"
   role             = aws_iam_role.iam_for_lambda.arn
 
+  environment {
+   variables = {
+      SQS_URL = aws_sqs_queue.sqs_test.url
+      BUCKET_NAME = aws_s3_bucket.bucket.bucket
+    } 
+  }
+
   depends_on = [
     aws_iam_role_policy_attachment.lambda_logs,
     aws_cloudwatch_log_group.handler_lambda,

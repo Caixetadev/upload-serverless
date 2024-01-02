@@ -31,9 +31,7 @@ func NewUploaderFunctionHandler(s3Client *s3.Client, sqsClient *sqs.Client) *Upl
 }
 
 func (h *UploadFunctionHandler) Upload(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	fmt.Println(string(req.Body))
 	b64data := req.Body[strings.IndexByte(req.Body, ',')+1:]
-	fmt.Println(b64data)
 
 	data, err := base64.StdEncoding.DecodeString(b64data)
 	if err != nil {
@@ -44,7 +42,7 @@ func (h *UploadFunctionHandler) Upload(ctx context.Context, req events.APIGatewa
 	key := utils.GenerateRandomString(10)
 
 	params := &s3.PutObjectInput{
-		Bucket:      aws.String("upload-images-serverless-caixeta"),
+		Bucket:      aws.String(os.Getenv("BUCKET_NAME")),
 		Key:         aws.String(key),
 		Body:        bytes.NewReader(data),
 		ContentType: aws.String("image/png"),
@@ -75,10 +73,9 @@ func (h *UploadFunctionHandler) Upload(ctx context.Context, req events.APIGatewa
 }
 
 func sendMessageToSQS(ctx context.Context, sqsClient *sqs.Client, key string) {
-	fmt.Println("ENV: ", os.Getenv("QueueUrl"))
 	_, err := sqsClient.SendMessage(ctx, &sqs.SendMessageInput{
 		MessageBody: aws.String("Uploaded image with key " + key),
-		QueueUrl:    aws.String("https://sqs.eu-central-1.amazonaws.com/709960229950/sqs_test"),
+		QueueUrl:    aws.String(os.Getenv("SQS_URL")),
 	})
 
 	if err != nil {
