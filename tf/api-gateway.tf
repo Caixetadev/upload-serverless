@@ -36,7 +36,7 @@ resource "aws_api_gateway_integration" "lambda_upload" {
 
 resource "aws_api_gateway_deployment" "example" {
   depends_on = [
-    "aws_api_gateway_integration.lambda_upload",
+    aws_api_gateway_integration.lambda_upload,
   ]
 
   rest_api_id = aws_api_gateway_rest_api.example.id
