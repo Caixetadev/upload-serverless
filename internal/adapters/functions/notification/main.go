@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"teste/internal/adapters/handlers"
 
+	"github.com/Caixetadev/upload/internal/adapters/handlers"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ses"

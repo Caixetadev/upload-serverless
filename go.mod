@@ -1,4 +1,4 @@
-module teste
+module github.com/Caixetadev/upload
 
 go 1.21.5
 

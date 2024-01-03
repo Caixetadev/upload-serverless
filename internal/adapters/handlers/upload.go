@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"teste/internal/utils"
-	"teste/pkg/typesystem"
 
+	"github.com/Caixetadev/upload/internal/utils"
+	"github.com/Caixetadev/upload/pkg/typesystem"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
@@ -30,7 +30,10 @@ func NewUploaderFunctionHandler(s3Client *s3.Client, sqsClient *sqs.Client) *Upl
 	}
 }
 
-func (h *UploadFunctionHandler) Upload(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (h *UploadFunctionHandler) Upload(
+	ctx context.Context,
+	req events.APIGatewayProxyRequest,
+) (events.APIGatewayProxyResponse, error) {
 	b64data := req.Body[strings.IndexByte(req.Body, ',')+1:]
 
 	data, err := base64.StdEncoding.DecodeString(b64data)
@@ -77,7 +80,6 @@ func sendMessageToSQS(ctx context.Context, sqsClient *sqs.Client, key string) {
 		MessageBody: aws.String("Uploaded image with key " + key),
 		QueueUrl:    aws.String(os.Getenv("SQS_URL")),
 	})
-
 	if err != nil {
 		fmt.Printf("Got an error sending message: %s", err)
 	}

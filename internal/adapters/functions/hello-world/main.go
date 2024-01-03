@@ -1,8 +1,7 @@
 package main
 
 import (
-	"teste/internal/adapters/handlers"
-
+	"github.com/Caixetadev/upload/internal/adapters/handlers"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
