@@ -6,6 +6,7 @@ This repository showcases a serverless application for uploading images to Amazo
 - **Go (Golang)** Main project language
 - **API Gateway** for handling HTTP requests
 - **Lambda functions** for serverless compute
+- **S3** for store the images
 - **SQS** for message queuing
 - **Dead Letter Queue (DLQ)** for handling failed messages
 - **SES** for sending email notifications
