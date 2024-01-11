@@ -15,24 +15,26 @@ import (
 type NotificationHandler struct {
 	sqsClient *sqs.Client
 	sesClient *ses.Client
+	sesEmail  string
 }
 
-func NewNotificationHandler(sqsClient *sqs.Client, sesClient *ses.Client) *NotificationHandler {
+func NewNotificationHandler(sqsClient *sqs.Client, sesClient *ses.Client, sesEmail string) *NotificationHandler {
 	return &NotificationHandler{
 		sqsClient: sqsClient,
 		sesClient: sesClient,
+		sesEmail:  sesEmail,
 	}
 }
 
 func (h *NotificationHandler) HandleSQSMessage(ctx context.Context, event events.SQSEvent) error {
 	for _, record := range event.Records {
-		err := h.sendEmail(ctx, record.Body, "caixetacloud@gmail.com")
+		err := h.sendEmail(ctx, record.Body, h.sesEmail)
 		if err != nil {
 			fmt.Printf("Error sending email: %s\n", err)
 			continue
 		}
 
-		fmt.Printf("Email sent successfully to caixetacloud@gmail.com\n")
+		fmt.Printf("Email sent successfully to %s\n", h.sesEmail)
 	}
 
 	return nil
@@ -55,7 +57,7 @@ func (h *NotificationHandler) sendEmail(ctx context.Context, body, recipient str
 				Data:    aws.String("Subject of the email"),
 			},
 		},
-		Source: aws.String("caixetacloud@gmail.com"),
+		Source: aws.String(h.sesEmail),
 	}
 
 	_, err := h.sesClient.SendEmail(ctx, input)
