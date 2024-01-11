@@ -38,7 +38,7 @@ func (h *UploadFunctionHandler) Upload(
 
 	data, err := base64.StdEncoding.DecodeString(b64data)
 	if err != nil {
-		fmt.Println("Erro ao copiar dados: ", err)
+		fmt.Println("Error decoding base64 data:", err)
 		return events.APIGatewayProxyResponse{}, err
 	}
 
