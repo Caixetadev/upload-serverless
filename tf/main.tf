@@ -12,5 +12,5 @@ provider "aws" {
 }
 
 resource "aws_ses_email_identity" "ses_caixeta" {
-  email = "caixetacloud@gmail.com"
+  email = var.email
 }
